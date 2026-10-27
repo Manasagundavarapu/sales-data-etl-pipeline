@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.py[cod]
+sales.db
+data_quality_report.json
+.DS_Store
