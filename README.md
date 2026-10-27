@@ -1,105 +1,50 @@
-# Sales Data ETL Pipeline
+# Sales Data ETL Pipeline Using Python and SQL
 
-A beginner-friendly data engineering project that extracts raw sales data from CSV, validates and transforms it with Python/Pandas, loads it into SQLite, and produces a data quality report.
+## 📌 Project Overview
 
-## Architecture
+The **Sales Data ETL Pipeline** is a beginner-friendly data engineering project that demonstrates how raw sales data can be transformed into clean, structured, and analysis-ready data.
 
-`CSV source -> Extract -> Validate/Clean -> Calculate revenue -> SQLite -> SQL analysis`
+The project follows the ETL (Extract, Transform, Load) process using Python, Pandas, and SQLite. It cleans raw sales records, handles missing and invalid values, removes duplicate records, calculates revenue, and loads the processed data into a SQLite database for SQL-based analysis.
 
-## Tech stack
+## 🎯 Objectives
 
-- Python 3.10+
-- Pandas
-- SQLite (included with Python)
-- unittest (included with Python)
-- Git and GitHub
+- Build an end-to-end ETL pipeline using Python.
+- Clean and validate raw sales data.
+- Remove duplicate records and handle missing or invalid values.
+- Calculate revenue using quantity and unit price.
+- Store cleaned data in a SQLite database.
+- Analyze sales performance using SQL queries.
+- Generate a data quality report and validate the pipeline with tests.
 
-## Features
+## 🛠️ Technologies Used
 
-- Reads raw sales records from CSV.
-- Checks that required columns exist.
-- Parses dates and numeric fields.
-- Removes duplicate order IDs.
-- Drops records with missing/unparseable critical fields.
-- Rejects non-positive quantities and negative unit prices.
-- Calculates order revenue.
-- Loads clean records into a SQLite `sales` table.
-- Writes row counts to `data_quality_report.json`.
-- Includes SQL analytics queries and automated unit tests.
+- **Python** — ETL pipeline implementation
+- **Pandas** — Data cleaning and transformation
+- **SQLite** — Data storage
+- **SQL** — Sales analysis and aggregation
+- **Pytest** — Automated testing
+- **JSON** — Data quality reporting
+- **Git and GitHub** — Version control and project hosting
 
-## Setup in VS Code
+## 🔄 ETL Workflow
 
-### 1. Create and activate a virtual environment
+1. **Extract:** Read raw sales data from a CSV file.
+2. **Transform:** Clean the data, remove duplicates, handle missing or invalid records, and calculate revenue.
+3. **Load:** Store the cleaned records in a SQLite database.
+4. **Analyze:** Execute SQL queries to analyze sales and product performance.
+5. **Validate:** Generate a data quality report and run automated tests.
 
-Windows PowerShell:
-
-```powershell
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-```
-
-If PowerShell blocks activation, use Command Prompt:
-
-```bat
-.venv\Scripts\activate.bat
-```
-
-macOS/Linux:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-### 2. Install dependency
-
-```bash
-python -m pip install -r requirements.txt
-```
-
-### 3. Run the pipeline
-
-```bash
-python main.py
-```
-
-Expected summary: the pipeline completes, reports input and output row counts, and creates `sales.db` plus `data_quality_report.json`.
-
-### 4. Run tests
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-### 5. Run SQL queries
-
-Open `sales.db` with a SQLite viewer extension in VS Code, or use Python's SQLite tools. The queries are in `queries.sql`.
-
-## Data quality rules
-
-- `order_id`, `order_date`, `customer_id`, `product`, `quantity`, and `unit_price` are required.
-- The first row for a duplicate `order_id` is retained.
-- Rows with missing required values or invalid dates are removed.
-- Quantity must be a positive whole number.
-- Unit price must be zero or greater.
-
-For this demo, duplicate order IDs are assumed to represent duplicate orders. In a real system, confirm the business key and deduplication policy with stakeholders.
-
-## Example SQL questions
-
-1. What is total revenue?
-2. Which products generate the most revenue?
-3. How does revenue change by month?
-4. Are there duplicate order IDs in the target table?
-
-## Project structure
+## 📂 Project Structure
 
 ```text
 sales-data-etl-pipeline/
+│
 ├── data/
 │   └── sales_raw.csv
+│
 ├── tests/
 │   └── test_pipeline.py
+│
 ├── main.py
 ├── queries.sql
 ├── requirements.txt
@@ -107,18 +52,158 @@ sales-data-etl-pipeline/
 └── .gitignore
 ```
 
-## Possible next improvements
+Generated files, such as the SQLite database and data quality report, are created when the pipeline runs and are excluded from version control.
 
-- Add logging and retry handling.
-- Move configuration into environment variables or a config file.
-- Add a timestamped run history and incremental loading.
-- Schedule the pipeline with Airflow.
-- Store data in PostgreSQL or a cloud data warehouse.
-- Add a CI workflow that runs the tests on every GitHub push.
+## ⚙️ Installation and Setup
 
-## Resume description
+### Prerequisites
 
-**Sales Data ETL Pipeline | Python, Pandas, SQL, SQLite**
-- Built an ETL workflow to ingest sales data from CSV, validate records, remove duplicates, and calculate revenue.
-- Loaded transformed data into SQLite and wrote SQL queries for product-level and monthly revenue analysis.
-- Added automated unit tests and a data quality report to validate pipeline behavior.
+- Python 3.10 or later
+- Git
+- A code editor such as Visual Studio Code
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Manasagundavarapu/sales-data-etl-pipeline.git
+cd sales-data-etl-pipeline
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Activate it on Windows:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+If you use Command Prompt instead of PowerShell:
+
+```cmd
+.venv\Scripts\activate.bat
+```
+
+### 3. Install dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+## ▶️ Run the ETL Pipeline
+
+Execute the following command:
+
+```bash
+python main.py
+```
+
+The pipeline processes the raw CSV data, cleans the records, loads the results into SQLite, and generates a data quality report.
+
+### Expected Output
+
+```text
+ETL pipeline completed successfully.
+Raw rows: 16
+Clean rows: 11
+Rows removed: 5
+SQLite database: sales.db
+Quality report: data_quality_report.json
+```
+
+*Note: These results correspond to the sample dataset included in this project.*
+
+## 📊 SQL Analysis
+
+The project includes SQL queries in `queries.sql` to analyze the processed sales data.
+
+### 1. Total Orders and Revenue
+
+```sql
+SELECT
+    COUNT(*) AS order_count,
+    ROUND(SUM(revenue), 2) AS total_revenue
+FROM sales;
+```
+
+**Sample result:**
+
+| Metric | Value |
+|---|---:|
+| Cleaned records | 11 |
+| Total revenue | 989.00 |
+
+### 2. Product Performance
+
+```sql
+SELECT
+    product,
+    SUM(quantity) AS units_sold,
+    ROUND(SUM(revenue), 2) AS total_revenue
+FROM sales
+GROUP BY product
+ORDER BY total_revenue DESC;
+```
+
+This query identifies products with the highest revenue and summarizes the quantity sold.
+
+### 3. Monthly Revenue Analysis
+
+```sql
+SELECT
+    SUBSTR(order_date, 1, 7) AS month,
+    ROUND(SUM(revenue), 2) AS monthly_revenue
+FROM sales
+GROUP BY SUBSTR(order_date, 1, 7)
+ORDER BY month;
+```
+
+This query summarizes revenue by month to help identify sales trends.
+
+## 🧪 Testing
+
+Run the automated tests using:
+
+```bash
+python -m pytest -v
+```
+
+The tests validate the ETL pipeline's behavior and help identify issues during data processing.
+
+## 📈 Key Features
+
+- Automated CSV data ingestion
+- Data cleaning and validation
+- Duplicate record removal
+- Missing and invalid data handling
+- Revenue calculation
+- SQLite database loading
+- SQL-based sales analytics
+- JSON data quality reporting
+- Automated test coverage
+
+## 🚀 Future Enhancements
+
+- Schedule ETL runs automatically.
+- Add logging and error-handling mechanisms.
+- Connect to a cloud data warehouse such as Amazon Redshift.
+- Orchestrate workflows using Apache Airflow.
+- Add data visualizations and sales dashboards.
+- Implement incremental data loading for larger datasets.
+
+## 💡 Learning Outcomes
+
+This project demonstrates practical understanding of ETL fundamentals, Python-based data transformation, relational databases, SQL aggregation, data quality checks, and automated testing.
+
+## 👩‍💻 Author
+
+**Manasa Gundavarapu**
+
+GitHub: [Manasagundavarapu](https://github.com/Manasagundavarapu)
+
+---
+
+If you find this project useful, feel free to explore the repository and suggest improvements.
